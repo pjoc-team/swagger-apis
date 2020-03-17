@@ -1,4 +1,4 @@
-FROM swaggerapi/swagger-ui:v3.23.9
+FROM swaggerapi/swagger-ui:latest
 
 ENV CONFIG_URL /apis/swagger-config.json
 COPY run.sh /run.sh
