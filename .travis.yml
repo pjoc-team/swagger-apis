@@ -1,0 +1,20 @@
+language: shell
+services:
+- docker
+env:
+  global:
+
+before_install:
+- export BASE_REPO=$DOCKER_USER/${TRAVIS_REPO_SLUG##*/}
+- export DOCKER_TAG=${TRAVIS_COMMIT:0:7}
+- export DEV_REPO=${BASE_REPO}:$DOCKER_TAG
+- export RELEASE_REPO=${BASE_REPO}:$TRAVIS_TAG
+- export LATEST_REPO=${BASE_REPO}:latest
+- env
+- docker login -u$DOCKER_USER -p$DOCKER_PASS
+install:
+- if [[ -z "$TRAVIS_TAG" ]]; then docker build ./ -t $DEV_REPO && docker push $DEV_REPO;
+  fi
+- if [[ -n "$TRAVIS_TAG" ]]; then docker pull $DEV_REPO && docker tag $DEV_REPO $RELEASE_REPO
+  && docker tag $DEV_REPO $LATEST_REPO && docker push $RELEASE_REPO && docker push
+  $LATEST_REPO; fi
