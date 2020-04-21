@@ -1,0 +1,4 @@
+FROM blademainer/swagger-apis
+
+COPY . /tmp/proto
+RUN mkdir -p /apis/ && find /tmp/proto -name "*.swagger.json" -type f -exec cp "{}" /apis/  \; && rm -r /tmp/proto
